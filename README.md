@@ -1,2 +1,2 @@
 # apiheartbeat
-An application to check API's pulse and send notifications if they flatline.
+An application that checks your API's pulse and sends notifications if they flatline.
