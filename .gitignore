@@ -60,5 +60,6 @@ typings/
 # next.js build output
 .next
 
-src/db/
 package-lock.json
+
+db/

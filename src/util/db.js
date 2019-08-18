@@ -5,10 +5,11 @@ module.exports = {
   get: (key) => {
     return new Promise((resolve, reject) => {
       db.get(key, (err, value) => {
-        if (typeof JSON.parse(value) === 'object') {
+        console.log('db get value', value, typeof value);
+        if (err) resolve(undefined);
+        if (value && typeof JSON.parse(value) === 'object') {
           value = JSON.parse(value);
         }
-        if (err) reject(err);
         resolve(value);
       });
     });

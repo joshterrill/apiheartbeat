@@ -26,6 +26,7 @@
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.8.16",
-    "level": "^5.0.1"
+    "level": "^5.0.1",
+    "uuid": "^3.3.2"
   }
 }
