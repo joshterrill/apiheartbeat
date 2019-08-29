@@ -1,30 +1,35 @@
-const db = require('./util/db');
-const uuidv1 = require('uuid/v1');
+const express = require('express');
+const bodyParser = require('body-parser');
+const compression = require('compression');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-module.exports = {
-  addSource: async (source) => {
-    let sources = await db.get('sources');
-    console.log('sources in add source', sources);
-    if (!sources) {
-      source.id = uuidv1();
-      return await db.put('sources', [source]);
-    }
-    const alreadyExists = sources.find(item => item.url === source.url);
-    if (alreadyExists) throw new Error('This URL already exists');
-    source.id = uuidv1();
-    sources = sources.push(source);
-    return await db.put('sources', sources);
-  },
-  updateSource: async (source) => {
-    let sources = await db.get('sources');
-    const foundIndex = sources.findIndex(item => item.id === source.id);
-    if (foundIndex === -1) throw new Error('Unable to find URL');
-    sources[foundIndex] = source;
-    return await db.put('sources', sources);
-  },
-  getAll: async (key) => {
-    return await db.get(key);
-  },
-}
+const routes = require('./routes/index');
+const middlewares = require('./lib/middlewares');
 
+dotenv.config();
 
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(bodyParser({extended: true}));
+app.use(compression());
+
+app.use('/api/endpoint', middlewares.checkToken, routes.endpoint());
+app.use('/api', routes.api());
+
+mongoose.connect(process.env.MONGO_URL, (err) => {
+  if (err) {
+    console.error('Error connecting to mongoose database', err);
+    return;
+  }
+
+  app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+  });
+});
+
+process.on('uncaughtException', function (err) {
+  console.error(err);
+  console.log("Node NOT Exiting...");
+});
