@@ -1,12 +1,17 @@
 const mongoose = require('mongoose');
+const EndpointMessageSchema = require('./EndpointMessage').schema;
 const Schema = mongoose.Schema;
 
 const EndpointSchema = new Schema({
   url: String,
-  statusCode: Number,
-  createdOn: Date,
+  statusCode: {type: Number, default: 200},
+  createdOn: {type: Date, default: new Date()},
+  frequency: Number,
+  interval: String,
   nextHeartbeatDate: Date,
-  isActive: Boolean,
+  isActive: {type: Boolean, default: true},
+  isUp: {type: Boolean, default: true},
+  messages: [EndpointMessageSchema],
   userId: mongoose.Schema.Types.ObjectId,
 });
 

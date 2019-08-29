@@ -21,7 +21,7 @@ module.exports = () => {
       await EndpointModel.create({
         ...data,
         createdOn: new Date(),
-        nextHeartbeatDate: new Date(),
+        nextHeartbeatDate: heartbeat.calculateNextHeartbeatDate(null, data.frequency, data.interval),
         isActive: true,
         userId: req.token._id,
       });

@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 
 const routes = require('./routes/index');
 const middlewares = require('./lib/middlewares');
+const scheduler = require('./lib/scheduler');
+const notifiers = require('./lib/notifiers');
 
 dotenv.config();
 
@@ -26,6 +28,7 @@ mongoose.connect(process.env.MONGO_URL, (err) => {
 
   app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
+    scheduler.startScheduler();
   });
 });
 
