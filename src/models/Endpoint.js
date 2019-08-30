@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const EndpointSchema = new Schema({
   url: String,
   statusCode: {type: Number, default: 200},
+  responseTime: Number,
   createdOn: {type: Date, default: new Date()},
   frequency: Number,
   interval: String,

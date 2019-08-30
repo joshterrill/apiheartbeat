@@ -14,11 +14,12 @@ async function request(url, options) {
   });
 }
 
-async function saveEndpointMessage(ok, status, message, isManualCheck, endpoint) {
+async function saveEndpointMessage(ok, status, message, isManualCheck, responseTime, endpoint) {
   return await EndpointMessageModel.create({
     ok,
     status,
     message,
+    responseTime,
     dateTime: new Date(),
     isManualCheck,
     endpointId: endpoint._id,
@@ -29,24 +30,29 @@ async function saveEndpointMessage(ok, status, message, isManualCheck, endpoint)
 async function checkHeartbeat(endpoint, isManualCheck) {
   try {
     const options = {
+      time: true,
       headers: {
         referrer: 'https://apiheartbeat.com',
       },
     };
     const heartbeat = await request(endpoint.url, options);
-    if (heartbeat && heartbeat.statusCode === endpoint.statusCode) {
-      await saveEndpointMessage(true, 'success', 'Success', isManualCheck, endpoint);
+    if (heartbeat && heartbeat.statusCode === endpoint.statusCode && endpoint.responseTime > heartbeat.elapsedTime) {
+      await saveEndpointMessage(true, 'success', 'Success', isManualCheck, heartbeat.elapsedTime, endpoint);
       return {ok: true, status: 'success', message: 'Success'};
     } else if (heartbeat.body && heartbeat.statusCode !== endpoint.statusCode) {
-      const message = `Endpoint returned with body but status code ${heartbeat.statusCode} does not match ${endpoint.statusCode}`;
-      await saveEndpointMessage(true, 'warning', message, isManualCheck, endpoint);
+      const message = `Response status code ${heartbeat.statusCode} does not match expected status code ${endpoint.statusCode}`;
+      await saveEndpointMessage(true, 'warning', message, isManualCheck, heartbeat.elapsedTime, endpoint);
+      return {ok: true, status: 'warning', message};
+    } else if (heartbeat.body && endpoint.responseTime < heartbeat.elapsedTime) {
+      const message = `Response time ${heartbeat.elapsedTime} ms does not meet expected response time ${endpoint.responseTime} ms`;
+      await saveEndpointMessage(true, 'warning', message, isManualCheck, heartbeat.elapsedTime, endpoint);
       return {ok: true, status: 'warning', message};
     } else if (!heartbeat || !heartbeat.body || heartbeat.error) {
-      await saveEndpointMessage(false, 'error', heartbeat.error, isManualCheck, endpoint);
+      await saveEndpointMessage(false, 'error', heartbeat.error, isManualCheck, heartbeat.elapsedTime, endpoint);
       return {ok: false, status: 'error', message: heartbeat.error};
     }
   } catch (error) {
-    await saveEndpointMessage(false, 'error', error.message, isManualCheck, endpoint);
+    await saveEndpointMessage(false, 'error', error.message, isManualCheck, -1, endpoint);
     return {ok: false, status: 'error', message: error.message};
   }
 }

@@ -4,12 +4,15 @@ const compression = require('compression');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-const middlewares = require('./lib/middlewares');
+dotenv.config();
+
+const jwtMiddleware = require('express-jwt-middleware');
+const jwtCheck = jwtMiddleware(process.env.JWT_SECRET);
+
 const scheduler = require('./lib/scheduler');
 
 const endpointRoutes = require('./app/endpoint/endpoint.routes');
-
-dotenv.config();
+const authRoutes = require('./app/auth/auth.routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,7 +21,8 @@ function init() {
   app.use(bodyParser({extended: true}));
   app.use(compression());
 
-  app.use('/api/endpoint', middlewares.checkToken, endpointRoutes());
+  app.use('/api/auth', authRoutes());
+  app.use('/api/endpoint', jwtCheck, endpointRoutes());
 
   mongoose.connect(process.env.MONGO_URL, (err) => {
     if (err) {
@@ -28,7 +32,9 @@ function init() {
 
     app.listen(port, () => {
       console.log(`Server listening on port ${port}`);
-      scheduler.startScheduler();
+      if (process.env.NODE_ENV !== 'development') {
+        scheduler.startScheduler();
+      }
     });
   });
 }

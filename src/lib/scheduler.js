@@ -1,7 +1,5 @@
 const scheduler = require('node-schedule');
 const heartbeat = require('./heartbeat');
-const EndpointMessageModel = require('../models/EndpointMessage');
-const notifiers = require('./notifiers');
 
 function startScheduler() {
   const j = scheduler.scheduleJob('1 * * * * *', async () => {
@@ -15,13 +13,13 @@ function startScheduler() {
           endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
           await endpoint.save();
           if (check.status === 'error') {
-          notifiers.sendGmail('joshterrill.dev@gmail.com', endpoint, check.message);
+            // todo: send notification
           }
         } catch (error) {
           endpoint.isUp = false;
           endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
           await endpoint.save();
-          notifiers.sendGmail('joshterrill.dev@gmail.com', endpoint, error.message);
+          // todo: send notification
           console.error(`Error retrieving endpoints at ${new Date()}, message: ${error.message}`);
         }
       }

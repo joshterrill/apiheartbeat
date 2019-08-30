@@ -1,32 +1,45 @@
 const Router = require('express').Router;
 const EndpointService = require('./endpoint.service');
+const EndpointModel = require('../../models/Endpoint');
 
 module.exports = () => {
   const api = Router();
 
-  api.post('/check', async (req, res) => {
+  api.get('/fetch', async (req, res) => {
+    try {
+      const endpoints = await EndpointService.getEndpoints(req.tokenData._id);
+      res.json(endpoints);
+    } catch (error) {
+      res.json(error);
+
+    }
+  });
+  api.post('/save', async (req, res) => {
     try {
       const endpoint = req.body;
+      const save = await EndpointService.saveEndpoint(endpoint, req.tokenData._id);
+      res.json(save);
+    } catch (error) {
+      res.json(error);
+    }
+  });
+  api.post('/check/:endpointId?', async (req, res) => {
+    try {
+      const { endpointId } = req.params;
+      let endpoint = req.body;
+      if (endpointId) {
+        endpoint = await EndpointModel.findById(endpointId);
+      }
       const check = await EndpointService.checkEndpoint(endpoint);
       res.json(check);
     } catch (error) {
       res.json(error);
     }
   });
-  api.post('/save', async (req, res) => {
+  api.get('/messages/:endpointId?', async (req, res) => {
     try {
-      const endpoint = req.body;
-      const save = await EndpointService.saveEndpoint(endpoint);
-      res.json(save);
-    } catch (error) {
-      res.json(error);
-    }
-  });
-  api.get('/messages/:endpointId', async (req, res) => {
-    try {
-      const token = req.token;
       const { endpointId } = req.params;
-      const messages = await EndpointService.getMessages(token._id, endpointId);
+      const messages = await EndpointService.getMessages(req.tokenData._id, endpointId);
       res.json(messages);
     } catch (error) {
       res.json(error);

@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 
 function sendGmail(to, endpoint, message) {
-  console.log('sendGmail', to, endpoint, message);
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -16,7 +15,6 @@ function sendGmail(to, endpoint, message) {
     html: `<p>URL: ${endpoint.url}</p><p>Message: ${message}</p>`,
   };
   transporter.sendMail(mailOptions, (error, info) => {
-    console.log('sendmailresponse', info, error);
     if (error) {
       console.error('Error sending mail from sendGmail()', error);
       return;

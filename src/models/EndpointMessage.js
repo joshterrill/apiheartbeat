@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const EndpointMessageSchema = new Schema({
   message: String,
+  responseTime: Number,
   dateTime: Date,
   ok: Boolean,
   status: String,
