@@ -5,6 +5,7 @@ const EndpointMessageSchema = new Schema({
   message: String,
   dateTime: Date,
   ok: Boolean,
+  status: String,
   endpointId: mongoose.Schema.Types.ObjectId,
 });
 

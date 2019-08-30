@@ -1,21 +1,16 @@
-const Router = require('express').Router;
-const heartbeat = require('../lib/heartbeat');
-const EndpointModel = require('../models/Endpoint');
+const heartbeat = require('../../lib/heartbeat');
 
-module.exports = () => {
-  const api = Router();
-
-  api.post('/check', async (req, res) => {
+module.exports = {
+  checkEndpoint: async (req, res, next) => {
     const endpoint = req.body;
     try {
       const heartbeatRes = await heartbeat.checkHeartbeat(endpoint);
       res.json(heartbeatRes);
     } catch (error) {
-      res.json({ok: false, message: error.message});
+      res.json({ok: false, status: 'error', message: error.message});
     }
-  });
-
-  api.post('/save', async (req, res) => {
+  },
+  saveEndpoint: async (req, res, next) => {
     try {
       const data = req.body;
       await EndpointModel.create({
@@ -29,8 +24,5 @@ module.exports = () => {
     } catch (error) {
       res.json({ok: false, message: error.message});
     }
-  });
-
-  return api;
-
+  },
 }
