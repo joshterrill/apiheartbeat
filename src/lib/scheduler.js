@@ -11,22 +11,21 @@ function startScheduler() {
       for (let endpoint of endpoints) {
         try {
           const check = await heartbeat.checkHeartbeat(endpoint);
-          const now = new Date();
           endpoint.isUp = check.ok;
-          endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(now, endpoint.frequency, endpoint.interval);
+          endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
           await Promise.all([
             endpoint.save(),
             EndpointMessageModel.create({
               message: check.message,
               ok: check.ok,
               status: check.status,
-              dateTime: now,
+              dateTime: new Date(),
               endpointId: endpoint._id,
             }),
           ]);
         } catch (error) {
           endpoint.isUp = false;
-          endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(now, endpoint.frequency, endpoint.interval);
+          endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
           await Promise.all([
             endpoint.save(),
             EndpointMessageModel.create({

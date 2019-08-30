@@ -1,29 +1,18 @@
 const heartbeat = require('../../lib/heartbeat');
 
-async function checkEndpoint(req, res, next) {
-  const endpoint = req.body;
-  try {
-    const heartbeatRes = await heartbeat.checkHeartbeat(endpoint);
-    res.json(heartbeatRes);
-  } catch (error) {
-    res.json({ok: false, status: 'error', message: error.message});
-  }
+async function checkEndpoint(endpoint) {
+  return await heartbeat.checkHeartbeat(endpoint);
 }
 
-async function saveEndpoint(req, res, next) {
-  try {
-    const data = req.body;
-    await EndpointModel.create({
-      ...data,
-      createdOn: new Date(),
-      nextHeartbeatDate: heartbeat.calculateNextHeartbeatDate(null, data.frequency, data.interval),
-      isActive: true,
-      userId: req.token._id,
-    });
-    res.json({ok: true, message: 'Saved new endpoint'});
-  } catch (error) {
-    res.json({ok: false, message: error.message});
-  }
+async function saveEndpoint(endpoint) {
+  const endpoint = await EndpointModel.create({
+    ...endpoint,
+    createdOn: new Date(),
+    nextHeartbeatDate: heartbeat.calculateNextHeartbeatDate(null, endpoint.frequency, endpoint.interval),
+    isActive: true,
+    userId: req.token._id,
+  });
+  return {ok: true, status: 'success', message: 'Saved successfully'};
 }
 
 module.exports = {
