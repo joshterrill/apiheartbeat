@@ -10,32 +10,17 @@ function startScheduler() {
       console.log(`Checking ${endpoints.length} endpoints`);
       for (let endpoint of endpoints) {
         try {
-          const check = await heartbeat.checkHeartbeat(endpoint);
+          const check = await heartbeat.checkHeartbeat(endpoint, false);
           endpoint.isUp = check.ok;
           endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
-          await Promise.all([
-            endpoint.save(),
-            EndpointMessageModel.create({
-              message: check.message,
-              ok: check.ok,
-              status: check.status,
-              dateTime: new Date(),
-              endpointId: endpoint._id,
-            }),
-          ]);
+          await endpoint.save();
+          if (check.status === 'error') {
+          notifiers.sendGmail('joshterrill.dev@gmail.com', endpoint, check.message);
+          }
         } catch (error) {
           endpoint.isUp = false;
           endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
-          await Promise.all([
-            endpoint.save(),
-            EndpointMessageModel.create({
-              message: error.message,
-              ok: false,
-              status: 'error',
-              dateTime: new Date(),
-              endpointId: endpoint._id,
-            }),
-          ]);
+          await endpoint.save();
           notifiers.sendGmail('joshterrill.dev@gmail.com', endpoint, error.message);
           console.error(`Error retrieving endpoints at ${new Date()}, message: ${error.message}`);
         }

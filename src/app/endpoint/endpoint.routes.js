@@ -22,6 +22,16 @@ module.exports = () => {
       res.json(error);
     }
   });
+  api.get('/messages/:endpointId', async (req, res) => {
+    try {
+      const token = req.token;
+      const { endpointId } = req.params;
+      const messages = await EndpointService.getMessages(token._id, endpointId);
+      res.json(messages);
+    } catch (error) {
+      res.json(error);
+    }
+  });
 
   return api;
 }

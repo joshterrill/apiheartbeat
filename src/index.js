@@ -28,7 +28,7 @@ function init() {
 
     app.listen(port, () => {
       console.log(`Server listening on port ${port}`);
-      // scheduler.startScheduler();
+      scheduler.startScheduler();
     });
   });
 }

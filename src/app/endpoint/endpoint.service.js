@@ -1,7 +1,12 @@
 const heartbeat = require('../../lib/heartbeat');
+const EndpointMessageModel = require('../../models/EndpointMessage');
 
 async function checkEndpoint(endpoint) {
-  return await heartbeat.checkHeartbeat(endpoint);
+  return await heartbeat.checkHeartbeat(endpoint, true);
+}
+
+async function getMessages(userId, endpointId) {
+  return await EndpointMessageModel.find({userId, endpointId}).sort({dateTime: -1});
 }
 
 async function saveEndpoint(endpoint) {
@@ -18,4 +23,5 @@ async function saveEndpoint(endpoint) {
 module.exports = {
   checkEndpoint,
   saveEndpoint,
+  getMessages,
 }
