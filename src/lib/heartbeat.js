@@ -36,7 +36,10 @@ async function checkHeartbeat(endpoint, isManualCheck) {
       },
     };
     const heartbeat = await request(endpoint.url, options);
-    if (heartbeat && heartbeat.statusCode === endpoint.statusCode && endpoint.responseTime > heartbeat.elapsedTime) {
+    if (!heartbeat || !heartbeat.body || heartbeat.error) {
+      await saveEndpointMessage(false, 'error', heartbeat.error, isManualCheck, heartbeat.elapsedTime, endpoint);
+      return {ok: false, status: 'error', message: heartbeat.error};
+    } else if (heartbeat && heartbeat.statusCode === endpoint.statusCode && endpoint.responseTime > heartbeat.elapsedTime) {
       await saveEndpointMessage(true, 'ok', 'Success', isManualCheck, heartbeat.elapsedTime, endpoint);
       return {ok: true, status: 'ok', message: 'Success'};
     } else if (heartbeat.body && heartbeat.statusCode !== endpoint.statusCode) {
@@ -47,9 +50,6 @@ async function checkHeartbeat(endpoint, isManualCheck) {
       const message = `Response time ${heartbeat.elapsedTime} ms does not meet expected response time ${endpoint.responseTime} ms`;
       await saveEndpointMessage(true, 'warning', message, isManualCheck, heartbeat.elapsedTime, endpoint);
       return {ok: true, status: 'warning', message};
-    } else if (!heartbeat || !heartbeat.body || heartbeat.error) {
-      await saveEndpointMessage(false, 'error', heartbeat.error, isManualCheck, heartbeat.elapsedTime, endpoint);
-      return {ok: false, status: 'error', message: heartbeat.error};
     }
   } catch (error) {
     await saveEndpointMessage(false, 'error', error.message, isManualCheck, -1, endpoint);

@@ -12,11 +12,16 @@ export class HomeComponent implements OnInit {
 
   constructor(private appService: AppService) { }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+    this.init();
+    setInterval(() => {
+      this.init();
+    }, 60000); // every minute
+  }
+
+  async init(): Promise<void> {
     try {
-      const endpoints = await this.appService.getEndpoints();
-      this.endpoints = endpoints;
-      console.log(this.endpoints);
+      this.endpoints = await this.appService.getEndpoints();
     } catch (error) {
       console.log(error);
     }
