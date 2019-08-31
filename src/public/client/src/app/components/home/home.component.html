@@ -11,7 +11,7 @@
           </div>
           <div class="bottom title-row mt-3 mb-2">
             <div class="float-right">
-                <input type="checkbox" [ngModel]="showInactive" (ngModelChange)="changeShowInactive($event)" /> Toggle Inactive Heartbeats
+              <input type="checkbox" [ngModel]="showInactive" (ngModelChange)="changeShowInactive($event)" /> Toggle Inactive Heartbeats
             </div>
           </div>
           <table class="table table-condensed table-striped">
@@ -26,9 +26,14 @@
             </tr>
             <tr *ngFor="let endpoint of appService?.endpoints | isActive:!showInactive">
               <td>
-                <span *ngIf="endpoint.status === 'error'" class="badge badge-danger">Error</span>
-                <span *ngIf="endpoint.status === 'warning'" class="badge badge-warning">Warning</span>
-                <span *ngIf="endpoint.status === 'ok'" class="badge badge-success">Ok</span>
+                <ng-container *ngIf="endpoint.isActive">
+                    <span *ngIf="endpoint.status === 'error'" class="badge badge-danger">Error</span>
+                    <span *ngIf="endpoint.status === 'warning'" class="badge badge-warning">Warning</span>
+                    <span *ngIf="endpoint.status === 'ok'" class="badge badge-success">Ok</span>
+                </ng-container>
+                <ng-container *ngIf="!endpoint.isActive">
+                  <span class="badge badge-danger">Deactivated</span>
+                </ng-container>
               </td>
               <td>
                 <a [href]="endpoint.url" target="_new">{{endpoint.url}}</a>

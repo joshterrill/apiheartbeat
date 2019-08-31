@@ -4,24 +4,25 @@
       <div class="card card-signin my-5">
         <div class="card-body">
           <h5 class="card-title text-center">Register</h5>
-          <form class="form-signin">
+          <form class="form-signin" (submit)="doRegister()">
             <div class="form-label-group">
-              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus [(ngModel)]="registerForm.email" [ngModelOptions]="{standalone: true}">
               <label for="inputEmail">Email address</label>
             </div>
 
             <div class="form-label-group">
-              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required [(ngModel)]="registerForm.password" [ngModelOptions]="{standalone: true}">
               <label for="inputPassword">Password</label>
             </div>
 
             <div class="form-label-group">
-              <input type="password" id="inputPasswordConfirm" class="form-control" placeholder="Confirm Password" required>
+              <input type="password" id="inputPasswordConfirm" class="form-control" placeholder="Confirm Password" required [(ngModel)]="registerForm.confirmPassword" [ngModelOptions]="{standalone: true}">
               <label for="inputPasswordConfirm">Confirm password</label>
             </div>
             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
             <hr class="my-4">
-            <button class="btn btn-lg btn-github btn-block text-uppercase" type="submit"><i class="fab fa-github mr-2"></i> Register with Github</button>
+            <button class="btn btn-lg btn-success btn-block text-uppercase" [routerLink]="'/login'">Login</button>
+            <button class="btn btn-lg btn-github btn-block text-uppercase"><i class="fab fa-github mr-2"></i> Register with Github</button>
           </form>
         </div>
       </div>

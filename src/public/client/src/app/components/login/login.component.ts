@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Login } from 'src/app/app.interfaces';
+import { AppService } from 'src/app/app.service';
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,24 @@ export class LoginComponent implements OnInit {
     password: '',
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private appService: AppService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    localStorage.removeItem('token');
   }
 
   async doLogin(): Promise<void> {
-    await this.router.navigate(['/home']);
+    try {
+      const {ok, token} = await this.appService.login(this.loginForm);
+      if (ok && token) {
+        localStorage.setItem('token', token);
+        this.router.navigate(['/home']);
+      } else {
+        console.log('register doRegister no token');
+      }
+    } catch (error) {
+      console.log('login doLogin error', error);
+    }
   }
 
 }

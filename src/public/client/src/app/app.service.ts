@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as jwt from 'angular2-jwt';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Login, NewEndpoint, Endpoint } from './app.interfaces';
+import { Login, NewEndpoint, Endpoint, Register } from './app.interfaces';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -20,6 +20,10 @@ export class AppService {
   isAuthenticated(): boolean {
     const token = this.getToken();
     return jwt.tokenNotExpired(null, token);
+  }
+
+  register(register: Register): Promise<any> {
+    return this.http.post(`${environment.apiUrl}/auth/register`, register).toPromise();
   }
 
   login(login: Login): Promise<any> {
