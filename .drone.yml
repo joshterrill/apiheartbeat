@@ -6,7 +6,8 @@ steps:
   image: plugins/docker
   settings:
     username: jterrill
-    password: pa55word
+    password:
+      from_secret: docker_password
     repo: docker.redshift.ai:5000/joshterrill/apiheartbeat
     registry: docker.redshift.ai:5000
     insecure: true
@@ -27,7 +28,7 @@ steps:
     host: apiheartbeat.com
     user: ubuntu
     port: 22
-    key_path: /drone/.ssh/SEC-SERVER.pem
+    key_path: /drone/.ssh/apiheartbeat.pem
     script:
       - docker pull docker.redshift.ai:5000/joshterrill/apiheartbeat:latest
       - docker stop apiheartbeat
