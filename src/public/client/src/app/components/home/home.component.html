@@ -63,11 +63,30 @@
         </button>
       </div>
       <div class="modal-body">
-        ...
+        <label>URL</label>
+        <input type="text" class="form-control mb-2" placeholder="URL" [(ngModel)]="newEndpoint.url" />
+        <label>Status Code</label>
+        <input type="number" class="form-control mb-2" placeholder="Status Code" [(ngModel)]="newEndpoint.statusCode" />
+        <label>Response Time (ms)</label>
+        <input type="number" class="form-control mb-2" placeholder="Response Time (ms)" [(ngModel)]="newEndpoint.responseTime" />
+        <label>Frequency</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Every</span>
+          </div>
+          <input type="number" class="form-control" [(ngModel)]="newEndpoint.frequency">
+          <select class="form-control" [(ngModel)]="newEndpoint.interval">
+            <option value="minutes">Minutes</option>
+            <option value="hours">Hours</option>
+            <option value="days">Days</option>
+            <option value="weeks">Weeks</option>
+            <option value="months">Months</option>
+          </select>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" (click)="saveEndpoint()">Save changes</button>
       </div>
     </div>
   </div>

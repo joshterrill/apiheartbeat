@@ -18,4 +18,8 @@ export class AppService {
   getEndpoints(): Promise<any> {
     return this.http.get(`${environment.apiUrl}/endpoint/fetch`).toPromise();
   }
+
+  saveEndpoint(endpoint): Promise<any> {
+    return this.http.post(`${environment.apiUrl}/endpoint/save`, endpoint).toPromise()
+  }
 }
