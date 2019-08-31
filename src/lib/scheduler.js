@@ -10,6 +10,7 @@ function startScheduler() {
         try {
           const check = await heartbeat.checkHeartbeat(endpoint, false);
           endpoint.isUp = check.ok;
+          endpoint.status = check.status;
           endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
           await endpoint.save();
           if (check.status === 'error') {

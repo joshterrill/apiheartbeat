@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mx-auto">
+        <div class="card my-5">
+            <div class="card-body">
+                <h1 class="float-left">Heartbeats</h1>
+
+                <div class="float-right">
+                  <button class="btn btn-success" data-toggle="modal" data-target="#addNewModal">Add New</button>
+                </div>
+
+                <table class="table table-condensed table-striped">
+                  <tr>
+                    <th>Status</th>
+                    <th>URL</th>
+                    <th>Frequency</th>
+                    <th>Next Run</th>
+                    <th>Status Code</th>
+                    <th>Reponse Time</th>
+                    <th>Action</th>
+                  </tr>
+                  <tr *ngFor="let endpoint of endpoints">
+                    <td>
+                      <span *ngIf="endpoint.status === 'error'" class="badge badge-danger">Error</span>
+                      <span *ngIf="endpoint.status === 'warning'" class="badge badge-warning">Warning</span>
+                      <span *ngIf="endpoint.status === 'ok'" class="badge badge-success">Ok</span>
+                    </td>
+                    <td>
+                      <a [href]="endpoint.url">{{endpoint.url}}</a>
+                    </td>
+                    <td>
+                      every {{endpoint.frequency}} {{endpoint.interval}}
+                    </td>
+                    <td>
+                      <ng-container *ngIf="isInPast(endpoint.nextHeartbeatDate)">
+                        Processing
+                      </ng-container>
+                      <ng-container *ngIf="!isInPast(endpoint.nextHeartbeatDate)">
+                        {{endpoint.nextHeartbeatDate | date:'short'}}
+                      </ng-container>
+                    </td>
+                    <td>{{endpoint.statusCode}}</td>
+                    <td>&lt;{{endpoint.responseTime}} ms</td>
+                    <td>
+                      <button class="btn btn-primary">Edit</button>
+                    </td>
+                  </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addNewModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNewModal">Add New Heartbeat</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
