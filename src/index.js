@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -24,10 +25,15 @@ function init() {
   app.use(cors());
 
   app.use(compression());
-  app.use(express.static('public/compiled'))
+  app.use(express.static(path.join(__dirname, 'public/compiled')));
+
 
   app.use('/api/auth', authRoutes());
   app.use('/api/endpoint', jwtCheck, endpointRoutes());
+
+  app.get('/*', (req, res) => {
+    res.sendFile('index.html', {root: `${__dirname}/public/compiled`});
+  });
 
   const options = {
     swaggerDefinition: {
@@ -64,7 +70,7 @@ function init() {
     }
 
     app.listen(port, () => {
-      console.log(`Server listening on port ${port}`);
+      console.log(`Server listening on port ${port} in environment: ${process.env.NODE_ENV}`);
       if (process.env.NODE_ENV !== 'development') {
         scheduler.startScheduler();
       }

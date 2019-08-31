@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Login, NewEndpoint, Endpoint, Register } from './app.interfaces';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AppService {
@@ -11,7 +12,7 @@ export class AppService {
   filteredEndpoints: Endpoint[] = [];
   refreshEndpoints: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   getToken(): string {
     return localStorage.getItem('token');
@@ -23,15 +24,15 @@ export class AppService {
   }
 
   register(register: Register): Promise<any> {
-    return this.http.post(`${environment.apiUrl}/auth/register`, register).toPromise();
+    return this.http.post(`${environment.apiUrl}/auth/register`, register).toPromise().catch(this.handleErrors);
   }
 
   login(login: Login): Promise<any> {
-    return this.http.post(`${environment.apiUrl}/auth/login`, login).toPromise();
+    return this.http.post(`${environment.apiUrl}/auth/login`, login).toPromise().catch(this.handleErrors);
   }
 
   getEndpoints(): Promise<any> {
-    return this.http.get(`${environment.apiUrl}/endpoint/fetch`).toPromise();
+    return this.http.get(`${environment.apiUrl}/endpoint/fetch`).toPromise().catch(this.handleErrors);
   }
 
   saveEndpoint(endpoint: NewEndpoint): Promise<any> {
@@ -39,18 +40,27 @@ export class AppService {
   }
 
   getEndpointMessages(endpointId: string): Promise<any> {
-    return this.http.get(`${environment.apiUrl}/endpoint/messages/${endpointId}`).toPromise();
+    return this.http.get(`${environment.apiUrl}/endpoint/messages/${endpointId}`).toPromise().catch(this.handleErrors);
   }
 
   manualCheckEndpoint(endpointId: string): Promise<any> {
-    return this.http.post(`${environment.apiUrl}/endpoint/check/${endpointId}`, {}).toPromise();
+    return this.http.post(`${environment.apiUrl}/endpoint/check/${endpointId}`, {}).toPromise().catch(this.handleErrors);
   }
 
   updateEndpointStatus(endpointId: string, isActive: boolean): Promise<any> {
-    return this.http.put(`${environment.apiUrl}/endpoint/status/${endpointId}`, {isActive}).toPromise();
+    return this.http.put(`${environment.apiUrl}/endpoint/status/${endpointId}`, {isActive}).toPromise().catch(this.handleErrors);
   }
 
   deleteEndpoint(endpointId: string): Promise<any> {
-    return this.http.delete(`${environment.apiUrl}/endpoint/delete/${endpointId}`).toPromise();
+    return this.http.delete(`${environment.apiUrl}/endpoint/delete/${endpointId}`).toPromise().catch(this.handleErrors);
+  }
+
+  handleErrors(error: Response): void {
+    // unauthorized
+    if (error.status === 403) {
+      location.href = '/login';
+      return;
+    }
+    throw new Error(error.json()['message']);
   }
 }

@@ -30,6 +30,7 @@
                     <span *ngIf="endpoint.status === 'error'" class="badge badge-danger">Error</span>
                     <span *ngIf="endpoint.status === 'warning'" class="badge badge-warning">Warning</span>
                     <span *ngIf="endpoint.status === 'ok'" class="badge badge-success">Ok</span>
+                    <span *ngIf="endpoint.status === 'na'" class="badge badge-default">Pending Check</span>
                 </ng-container>
                 <ng-container *ngIf="!endpoint.isActive">
                   <span class="badge badge-danger">Deactivated</span>

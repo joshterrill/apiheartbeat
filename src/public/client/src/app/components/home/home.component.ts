@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   endpointRefreshInterval: any;
   showInactive: boolean = false;
 
-  constructor(private appService: AppService, private router: Router) {
+  constructor(public appService: AppService, private router: Router) {
   }
 
   ngOnInit(): void {

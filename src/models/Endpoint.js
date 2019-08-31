@@ -12,7 +12,7 @@ const EndpointSchema = new Schema({
   nextHeartbeatDate: Date,
   isActive: {type: Boolean, default: true},
   isUp: {type: Boolean, default: true},
-  status: {type: String, default: 'ok'},
+  status: {type: String, default: 'na'},
   userId: mongoose.Types.ObjectId,
 });
 
