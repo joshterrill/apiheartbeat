@@ -17,6 +17,17 @@ async function getEndpoints(userId) {
   return await EndpointModel.find({userId}).sort({createdOn: -1});
 }
 
+async function updateEndpointStatus(endpointId, isActive) {
+  return await EndpointModel.updateOne({_id: endpointId}, {$set: {isActive}}, {upsert: true, safe: true});
+}
+
+async function deleteEndpoint(endpointId) {
+  return await Promise.all([
+    EndpointModel.findByIdAndDelete(endpointId),
+    EndpointMessageModel.deleteMany({endpointId}),
+  ]);
+}
+
 async function saveEndpoint(endpoint, userId) {
   return await EndpointModel.create({
     ...endpoint,
@@ -32,4 +43,6 @@ module.exports = {
   saveEndpoint,
   getMessages,
   getEndpoints,
+  updateEndpointStatus,
+  deleteEndpoint,
 }

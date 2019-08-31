@@ -1,53 +1,58 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 mx-auto">
-        <div class="card my-5">
-            <div class="card-body">
-                <h1 class="float-left">Heartbeats</h1>
-
-                <div class="float-right">
-                  <button class="btn btn-success" data-toggle="modal" data-target="#addNewModal">Add New</button>
-                </div>
-
-                <table class="table table-condensed table-striped">
-                  <tr>
-                    <th>Status</th>
-                    <th>URL</th>
-                    <th>Frequency</th>
-                    <th>Next Run</th>
-                    <th>Status Code</th>
-                    <th>Reponse Time</th>
-                    <th>Action</th>
-                  </tr>
-                  <tr *ngFor="let endpoint of endpoints">
-                    <td>
-                      <span *ngIf="endpoint.status === 'error'" class="badge badge-danger">Error</span>
-                      <span *ngIf="endpoint.status === 'warning'" class="badge badge-warning">Warning</span>
-                      <span *ngIf="endpoint.status === 'ok'" class="badge badge-success">Ok</span>
-                    </td>
-                    <td>
-                      <a [href]="endpoint.url" target="_new">{{endpoint.url}}</a>
-                    </td>
-                    <td>
-                      every {{endpoint.frequency}} {{endpoint.interval}}
-                    </td>
-                    <td>
-                      <ng-container *ngIf="isInPast(endpoint.nextHeartbeatDate)">
-                        Processing
-                      </ng-container>
-                      <ng-container *ngIf="!isInPast(endpoint.nextHeartbeatDate)">
-                        {{endpoint.nextHeartbeatDate | date:'short'}}
-                      </ng-container>
-                    </td>
-                    <td>{{endpoint.statusCode}}</td>
-                    <td>&lt;{{endpoint.responseTime}} ms</td>
-                    <td>
-                      <button class="btn btn-primary">Edit</button>
-                    </td>
-                  </tr>
-                </table>
+      <div class="card my-5">
+        <div class="card-body">
+          <div class="top title-row">
+            <h1 class="float-left">Heartbeats</h1>
+            <div class="float-right">
+              <button class="btn btn-success" data-toggle="modal" data-target="#addNewModal">Add New</button>
             </div>
+          </div>
+          <div class="bottom title-row mt-3 mb-2">
+            <div class="float-right">
+                <input type="checkbox" [ngModel]="showInactive" (ngModelChange)="changeShowInactive($event)" /> Toggle Inactive Heartbeats
+            </div>
+          </div>
+          <table class="table table-condensed table-striped">
+            <tr>
+              <th>Status</th>
+              <th>URL</th>
+              <th>Frequency</th>
+              <th>Next Run</th>
+              <th>Status Code</th>
+              <th>Reponse Time</th>
+              <th>Action</th>
+            </tr>
+            <tr *ngFor="let endpoint of appService?.endpoints | isActive:!showInactive">
+              <td>
+                <span *ngIf="endpoint.status === 'error'" class="badge badge-danger">Error</span>
+                <span *ngIf="endpoint.status === 'warning'" class="badge badge-warning">Warning</span>
+                <span *ngIf="endpoint.status === 'ok'" class="badge badge-success">Ok</span>
+              </td>
+              <td>
+                <a [href]="endpoint.url" target="_new">{{endpoint.url}}</a>
+              </td>
+              <td>
+                every {{endpoint.frequency}} {{endpoint.interval}}
+              </td>
+              <td>
+                <ng-container *ngIf="isInPast(endpoint.nextHeartbeatDate)">
+                  Processing
+                </ng-container>
+                <ng-container *ngIf="!isInPast(endpoint.nextHeartbeatDate)">
+                  {{endpoint.nextHeartbeatDate | date:'short'}}
+                </ng-container>
+              </td>
+              <td>{{endpoint.statusCode}}</td>
+              <td>&lt;{{endpoint.responseTime}} ms</td>
+              <td>
+                <button class="btn btn-primary" (click)="view(endpoint)">View</button>
+              </td>
+            </tr>
+          </table>
         </div>
+      </div>
     </div>
   </div>
 </div>
@@ -68,7 +73,8 @@
         <label>Status Code</label>
         <input type="number" class="form-control mb-2" placeholder="Status Code" [(ngModel)]="newEndpoint.statusCode" />
         <label>Response Time (ms)</label>
-        <input type="number" class="form-control mb-2" placeholder="Response Time (ms)" [(ngModel)]="newEndpoint.responseTime" />
+        <input type="number" class="form-control mb-2" placeholder="Response Time (ms)"
+          [(ngModel)]="newEndpoint.responseTime" />
         <label>Frequency</label>
         <div class="input-group mb-2">
           <div class="input-group-prepend">

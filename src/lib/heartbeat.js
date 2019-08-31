@@ -67,7 +67,7 @@ async function findScheduledJobsToRun() {
     // give ourselves a little room
     const dt = new Date();
     dt.setSeconds( dt.getSeconds() + 10 );
-    return await EndpointModel.find({nextHeartbeatDate: {$lte: dt}});
+    return await EndpointModel.find({isActive: true, nextHeartbeatDate: {$lte: dt}});
   } catch (error) {
     throw new Error(error);
   }

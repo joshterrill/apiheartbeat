@@ -11,6 +11,8 @@ import { HomeComponent } from './components/home/home.component';
 import { AppService } from './app.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './lib/TokenInterceptor';
+import { EndpointComponent } from './components/endpoint/endpoint.component';
+import { IsActivePipe } from './lib/isActive.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { TokenInterceptor } from './lib/TokenInterceptor';
     RegisterComponent,
     LoginComponent,
     MainComponent,
-    HomeComponent
+    HomeComponent,
+    EndpointComponent,
+    IsActivePipe,
   ],
   imports: [
     BrowserModule,

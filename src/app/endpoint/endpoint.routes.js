@@ -23,6 +23,25 @@ module.exports = () => {
       res.json(error);
     }
   });
+  api.put('/status/:endpointId', async (req, res) => {
+    try {
+      const { endpointId } = req.params;
+      const { isActive } = req.body;
+      const update = await EndpointService.updateEndpointStatus(endpointId, isActive);
+      res.json(update);
+    } catch (error) {
+      res.json(error);
+    }
+  });
+  api.delete('/delete/:endpointId', async (req, res) => {
+    try {
+      const { endpointId } = req.params;
+      const deleteEndpoint = await EndpointService.deleteEndpoint(endpointId);
+      res.json(deleteEndpoint);
+    } catch (error) {
+      res.json(error);
+    }
+  });
   api.post('/check/:endpointId?', async (req, res) => {
     try {
       const { endpointId } = req.params;

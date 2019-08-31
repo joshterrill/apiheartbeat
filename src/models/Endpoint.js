@@ -13,7 +13,7 @@ const EndpointSchema = new Schema({
   isActive: {type: Boolean, default: true},
   isUp: {type: Boolean, default: true},
   status: {type: String, default: 'ok'},
-  userId: mongoose.Schema.Types.ObjectId,
+  userId: mongoose.Types.ObjectId,
 });
 
 const EndpointModel = mongoose.model('Endpoint', EndpointSchema);

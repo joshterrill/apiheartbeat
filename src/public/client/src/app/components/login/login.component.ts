@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Login } from 'src/app/app.interfaces';
 
 @Component({
   selector: 'app-login',
@@ -8,12 +9,17 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  loginForm: Login = {
+    email: '',
+    password: '',
+  };
+
   constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
-  async login(): Promise<void> {
+  async doLogin(): Promise<void> {
     await this.router.navigate(['/home']);
   }
 

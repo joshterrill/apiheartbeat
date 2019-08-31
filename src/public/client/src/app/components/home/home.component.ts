@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../app.service';
+import { Endpoint, NewEndpoint } from '../../app.interfaces';
+import { Router } from '@angular/router';
 
 declare const $: any;
 
@@ -10,30 +12,21 @@ declare const $: any;
 })
 export class HomeComponent implements OnInit {
 
-  endpoints: any[] = [];
-  newEndpoint: any = {
+  newEndpoint: NewEndpoint = {
     url: '',
     statusCode: 200,
     responseTime: 500,
     frequency: 1,
     interval: 'hours',
   };
+  endpointRefreshInterval: any;
+  showInactive: boolean = false;
 
-  constructor(private appService: AppService) { }
-
-  ngOnInit(): void {
-    this.init();
-    setInterval(() => {
-      this.init();
-    }, 60000); // every minute
+  constructor(private appService: AppService, private router: Router) {
   }
 
-  async init(): Promise<void> {
-    try {
-      this.endpoints = await this.appService.getEndpoints();
-    } catch (error) {
-      console.log('init error', error);
-    }
+  ngOnInit(): void {
+    this.appService.refreshEndpoints.next(true);
   }
 
   isInPast(nextDate: string): boolean {
@@ -45,9 +38,9 @@ export class HomeComponent implements OnInit {
       await this.appService.saveEndpoint(this.newEndpoint);
       this.resetNewEndpoint();
       $('#addNewModal').modal('toggle');
-      this.init();
+      this.appService.refreshEndpoints.next(true);
     } catch (error) {
-      console.log('saveEndpoint error', error);
+      console.log('home saveEndpoint error', error);
     }
   }
 
@@ -59,6 +52,14 @@ export class HomeComponent implements OnInit {
       frequency: 1,
       interval: 'hours',
     };
+  }
+
+  view(endpoint: Endpoint): void {
+    this.router.navigate([`/endpoint/${endpoint._id}`]);
+  }
+
+  changeShowInactive(val: boolean) {
+    this.showInactive = val;
   }
 
 }

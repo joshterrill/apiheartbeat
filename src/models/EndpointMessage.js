@@ -8,8 +8,8 @@ const EndpointMessageSchema = new Schema({
   ok: Boolean,
   status: String,
   isManualCheck: Boolean,
-  endpointId: mongoose.Schema.Types.ObjectId,
-  userId: mongoose.Schema.Types.ObjectId,
+  endpointId: mongoose.Types.ObjectId,
+  userId: mongoose.Types.ObjectId,
 });
 
 const EndpointMessageModel = mongoose.model('EndpointMessage', EndpointMessageSchema);
