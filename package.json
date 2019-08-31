@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "mocha"
+    "test": "mocha src/**/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -41,7 +41,6 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "chai-http": "^1.0.0",
-    "supertest": "^3.4.2"
+    "mocha": "^6.2.0"
   }
 }

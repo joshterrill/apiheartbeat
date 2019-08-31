@@ -19,7 +19,9 @@ const port = process.env.PORT || 3000;
 
 function init() {
   app.use(bodyParser({extended: true}));
+
   app.use(compression());
+  app.use(express.static('public/compiled'))
 
   app.use('/api/auth', authRoutes());
   app.use('/api/endpoint', jwtCheck, endpointRoutes());
