@@ -30,10 +30,10 @@ steps:
     port: 22
     key_path: /drone/.ssh/apiheartbeat.pem
     script:
-      - docker pull docker.redshift.ai:5000/joshterrill/apiheartbeat:latest
-      - docker stop apiheartbeat
-      - docker rm apiheartbeat
-      - docker run -d -p 80:80 --env PORT=80 --env NODE_ENV=production --name apiheartbeat --restart unless-stopped docker.redshift.ai:5000/joshterrill/apiheartbeat:latest
+      - sudo docker pull docker.redshift.ai:5000/joshterrill/apiheartbeat:latest
+      - sudo docker stop apiheartbeat
+      - sudo docker rm apiheartbeat
+      - sudo docker run -d -p 80:80 --env PORT=80 --env NODE_ENV=production --name apiheartbeat --restart unless-stopped docker.redshift.ai:5000/joshterrill/apiheartbeat:latest
       - echo "Successfully restarted docker container"
 volumes:
 - name: ssh
