@@ -17,7 +17,6 @@ const endpointRoutes = require('./app/endpoint/endpoint.routes');
 const authRoutes = require('./app/auth/auth.routes');
 
 const app = express();
-const expressSwagger = require('express-swagger-generator')(app);
 const port = process.env.PORT || 3000;
 
 function init() {
@@ -34,34 +33,6 @@ function init() {
   app.get('/*', (req, res) => {
     res.sendFile('index.html', {root: `${__dirname}/public/compiled`});
   });
-
-  const options = {
-    swaggerDefinition: {
-      info: {
-        description: 'This is a sample server',
-        title: 'Swagger',
-        version: '1.0.0',
-      },
-      host: 'localhost:3000',
-      basePath: '/',
-      produces: [
-        'application/json',
-        'application/xml'
-      ],
-      schemes: ['http', 'https'],
-      securityDefinitions: {
-        JWT: {
-          type: 'apiKey',
-          in: 'header',
-          name: 'Authorization',
-          description: "",
-        }
-      }
-    },
-    basedir: __dirname,
-    files: ['./**/*.routes.js']
-  };
-  expressSwagger(options)
 
   mongoose.connect(process.env.MONGO_URL, (err) => {
     if (err) {
