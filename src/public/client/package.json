@@ -8,10 +8,6 @@
     "test": "ng test",
     "lint": "ng lint"
   },
-  "engines": {
-    "node": "8.9.0",
-    "npm": "6.4.1"
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~7.0.0",
