@@ -1,6 +1,6 @@
 {
   "name": "apiheartbeat",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An application that checks your API's pulse and sends notifications if they flatline.",
   "main": "index.js",
   "scripts": {
