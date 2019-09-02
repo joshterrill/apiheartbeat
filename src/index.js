@@ -42,9 +42,9 @@ function init() {
 
     app.listen(port, () => {
       console.log(`Server listening on port ${port} in environment: ${process.env.NODE_ENV}`);
-      if (process.env.NODE_ENV !== 'development') {
+      // if (process.env.NODE_ENV !== 'development') {
         scheduler.startScheduler();
-      }
+      // }
     });
   });
 }

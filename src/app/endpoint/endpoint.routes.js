@@ -42,13 +42,10 @@ module.exports = () => {
       res.json(error);
     }
   });
-  api.post('/check/:endpointId?', async (req, res) => {
+  api.post('/check/:endpointId', async (req, res) => {
     try {
       const { endpointId } = req.params;
-      let endpoint = req.body;
-      if (endpointId) {
-        endpoint = await EndpointModel.findById(endpointId);
-      }
+      const endpoint = await EndpointModel.findById(endpointId);
       const check = await EndpointService.checkEndpoint(endpoint);
       res.json(check);
     } catch (error) {

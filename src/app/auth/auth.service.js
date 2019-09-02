@@ -5,6 +5,9 @@ const UserModel = require('../../models/User');
 async function login(email, password) {
   email = email.toLowerCase();
   const user = await UserModel.findOne({email});
+  if (!user) {
+    return {ok: false, error: 'No account found'};
+  }
   if (utility.comparePassword(password, user.password)) {
     if (user.isActive) {
       await UserModel.updateOne({_id: user._id}, {$set: {lastLoginOn: new Date()}});

@@ -1,1 +1,17 @@
-<!-- todo -->
+{{> header}}
+<div style="margin: 15px;padding: 10px;background: rgba(255, 255, 255, 1);border-radius: 4px;">
+  <div class="tags" style="float: right;">
+    {{#equals "error" status}}
+        <span class="tag high-priority" style="color: rgba(203, 0, 0, 1) !important;border: 1px solid rgba(203, 0, 0, 0.4) !important;padding: 0.3em 0.5em;margin: 0;font-size: 9px;border-radius: 3px;text-transform: uppercase;font-weight: 500;">Error</span>
+    {{/equals}}
+    {{#equals "warning" status}}
+        <span class="tag medium-priority" style="color: rgba(230, 140, 0, 1) !important;border: 1px solid rgba(230, 140, 0, 0.4) !important;padding: 0.3em 0.5em;margin: 0;font-size: 9px;border-radius: 3px;text-transform: uppercase;font-weight: 500;">Warning</span>
+    {{/equals}}
+  </div>
+  <h1 class="alert-title" style="margin: 0;">{{url}}</h1>
+  <p class="alert-time">{{dateTime}}</p>
+  <div class="alert-description">
+      Message: {{message}}
+  </div>
+</div>
+{{> footer}}
