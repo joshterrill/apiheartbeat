@@ -1,4 +1,4 @@
 cd src/public/client
 npm ci
-npm i -g @angular/cli@7.0.4
+npm i -g @angular/cli
 ng build --configuration=production --output-path ../compiled/
