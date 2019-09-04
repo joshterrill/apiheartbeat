@@ -21,7 +21,7 @@ async function saveEndpointMessage(ok, status, message, isManualCheck, responseT
   if (lastEndpointMessage && lastEndpointMessage.message === message && lastEndpointMessage.status === status) {
     return await EndpointMessageModel.updateOne(
       {_id: ObjectID(lastEndpointMessage._id)},
-      { $set: { dateTime : new Date(), numberOfTimes: lastEndpointMessage.numberOfTimes + 1  } },
+      { $set: { dateTime : new Date(), numberOfTimes: lastEndpointMessage.numberOfTimes + 1, responseTime } },
       {upsert: true, safe: true},
     );
   } else {
