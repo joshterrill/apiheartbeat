@@ -20,7 +20,6 @@ export class HomeComponent implements OnInit {
     interval: 'hours',
   };
   endpointRefreshInterval: any;
-  showInactive: boolean = false;
 
   constructor(public appService: AppService, private router: Router) {
   }
@@ -56,10 +55,6 @@ export class HomeComponent implements OnInit {
 
   view(endpoint: Endpoint): void {
     this.router.navigate([`/endpoint/${endpoint._id}`]);
-  }
-
-  changeShowInactive(val: boolean) {
-    this.showInactive = val;
   }
 
 }

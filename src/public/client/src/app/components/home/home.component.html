@@ -9,11 +9,6 @@
               <button class="btn btn-success" data-toggle="modal" data-target="#addNewModal">Add New</button>
             </div>
           </div>
-          <div class="bottom title-row mt-3 mb-2">
-            <div class="float-right">
-              <input type="checkbox" [ngModel]="showInactive" (ngModelChange)="changeShowInactive($event)" /> Toggle Inactive Heartbeats
-            </div>
-          </div>
           <table class="table table-condensed table-striped">
             <tr>
               <th>Status</th>
@@ -24,7 +19,7 @@
               <th>Reponse Time</th>
               <th>Action</th>
             </tr>
-            <tr *ngFor="let endpoint of appService?.endpoints | isActive:!showInactive">
+            <tr *ngFor="let endpoint of appService?.endpoints">
               <td>
                 <ng-container *ngIf="endpoint.isActive">
                     <span *ngIf="endpoint.status === 'error'" class="badge badge-danger">Error</span>
@@ -37,7 +32,9 @@
                 </ng-container>
               </td>
               <td>
-                <a [href]="endpoint.url" target="_new">{{endpoint.url}}</a>
+                <div class="endpoint-url-container">
+                  <a [href]="endpoint.url" target="_new">{{endpoint.url}}</a>
+                </div>
               </td>
               <td>
                 every {{endpoint.frequency}} {{endpoint.interval}}

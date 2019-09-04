@@ -49,7 +49,8 @@ export class EndpointComponent implements OnInit, OnDestroy {
   async deactivate(): Promise<void> {
     try {
       await this.appService.updateEndpointStatus(this.endpoint._id, false);
-      this.router.navigate(['/home']);
+      this.appService.endpoints = await this.appService.getEndpoints();
+      await this.init();
     } catch (error) {
       console.log('endpoint deactivate error', error);
     }
@@ -58,7 +59,8 @@ export class EndpointComponent implements OnInit, OnDestroy {
   async activate(): Promise<void> {
     try {
       await this.appService.updateEndpointStatus(this.endpoint._id, true);
-      this.router.navigate(['/home']);
+      this.appService.endpoints = await this.appService.getEndpoints();
+      await this.init();
     } catch (error) {
       console.log('endpoint activate error', error);
     }

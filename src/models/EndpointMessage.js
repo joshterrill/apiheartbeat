@@ -8,6 +8,7 @@ const EndpointMessageSchema = new Schema({
   ok: Boolean,
   status: String,
   isManualCheck: Boolean,
+  numberOfTimes: {type: Number, default: 1},
   endpointId: mongoose.Types.ObjectId,
   userId: mongoose.Types.ObjectId,
 });

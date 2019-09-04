@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { EndpointComponent } from './components/endpoint/endpoint.component';
 
 const routes: Routes = [
+  {path: '',   redirectTo: '/home', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: '', component: MainComponent, children: [

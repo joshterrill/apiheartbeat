@@ -2,6 +2,7 @@ const requestCallback = require('request');
 const moment = require('moment');
 const EndpointModel = require('../models/Endpoint');
 const EndpointMessageModel = require('../models/EndpointMessage');
+const ObjectID = require('mongoose').Types.ObjectId;
 
 async function request(url, options) {
   return new Promise((resolve, reject) => {
@@ -15,16 +16,27 @@ async function request(url, options) {
 }
 
 async function saveEndpointMessage(ok, status, message, isManualCheck, responseTime, endpoint) {
-  return await EndpointMessageModel.create({
-    ok,
-    status,
-    message,
-    responseTime,
-    dateTime: new Date(),
-    isManualCheck,
-    endpointId: endpoint._id,
-    userId: endpoint.userId,
-  });
+  let lastEndpointMessage = await EndpointMessageModel.find({endpointId: endpoint._id}).sort({dateTime: -1}).limit(1);
+  lastEndpointMessage = lastEndpointMessage[0];
+  if (lastEndpointMessage && lastEndpointMessage.message === message && lastEndpointMessage.status === status) {
+    return await EndpointMessageModel.updateOne(
+      {_id: ObjectID(lastEndpointMessage._id)},
+      { $set: { dateTime : new Date(), numberOfTimes: lastEndpointMessage.numberOfTimes + 1  } },
+      {upsert: true, safe: true},
+    );
+  } else {
+    return await EndpointMessageModel.create({
+      ok,
+      status,
+      message,
+      responseTime,
+      dateTime: new Date(),
+      isManualCheck,
+      numberOfTimes: 1,
+      endpointId: endpoint._id,
+      userId: endpoint.userId,
+    });
+  }
 }
 
 async function checkHeartbeat(endpoint, isManualCheck) {
