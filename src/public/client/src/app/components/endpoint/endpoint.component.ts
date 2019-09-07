@@ -27,10 +27,11 @@ export class EndpointComponent implements OnInit, OnDestroy {
     clearInterval(this.messagesInterval);
   }
 
-  async init(): Promise<void> {
+  async init(forceRefresh = false): Promise<void> {
     try {
       const endpointId = this.activatedRoute.snapshot.params['endpointId'];
       this.messages = await this.appService.getEndpointMessages(endpointId);
+      await this.appService.getEndpoints(forceRefresh);
       this.endpoint = this.appService.endpoints.find(endpoint => endpoint._id === endpointId);
     } catch (error) {
       console.log('endpoint init error', error);
@@ -40,7 +41,7 @@ export class EndpointComponent implements OnInit, OnDestroy {
   async manualCheck(): Promise<void> {
     try {
       await this.appService.manualCheckEndpoint(this.endpoint._id);
-      this.init();
+      this.init(true);
     } catch (error) {
       console.log('endpoint manualCheck error', error);
     }
@@ -49,8 +50,7 @@ export class EndpointComponent implements OnInit, OnDestroy {
   async deactivate(): Promise<void> {
     try {
       await this.appService.updateEndpointStatus(this.endpoint._id, false);
-      this.appService.endpoints = await this.appService.getEndpoints();
-      await this.init();
+      await this.init(true);
     } catch (error) {
       console.log('endpoint deactivate error', error);
     }
@@ -59,8 +59,7 @@ export class EndpointComponent implements OnInit, OnDestroy {
   async activate(): Promise<void> {
     try {
       await this.appService.updateEndpointStatus(this.endpoint._id, true);
-      this.appService.endpoints = await this.appService.getEndpoints();
-      await this.init();
+      await this.init(true);
     } catch (error) {
       console.log('endpoint activate error', error);
     }

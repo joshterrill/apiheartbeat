@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
 import * as jwt from 'angular2-jwt';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Login, NewEndpoint, Endpoint, Register } from './app.interfaces';
 import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Injectable()
 export class AppService {
-  endpoints: Endpoint[] = [];
+  endpoints: Endpoint[];
   filteredEndpoints: Endpoint[] = [];
   refreshEndpoints: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
+
+  init(): void{
+    this.getEndpoints();
+    setInterval(() => this.getEndpoints(true), 60000);
+  }
 
   getToken(): string {
     return localStorage.getItem('token');
@@ -31,8 +35,15 @@ export class AppService {
     return this.http.post(`${environment.apiUrl}/auth/login`, login).toPromise().catch(this.handleErrors);
   }
 
-  getEndpoints(): Promise<any> {
-    return this.http.get(`${environment.apiUrl}/endpoint/fetch`).toPromise().catch(this.handleErrors);
+  async getEndpoints(update = false): Promise<Endpoint[]> {
+    console.log('calling get endpoint')
+    if (this.endpoints && !update) {
+      return this.endpoints;
+    } else {
+      const endpoints = await this.http.get(`${environment.apiUrl}/endpoint/fetch`).toPromise().catch(this.handleErrors) as Endpoint[];
+      this.endpoints = endpoints;
+      return this.endpoints;
+    }
   }
 
   saveEndpoint(endpoint: NewEndpoint): Promise<any> {
@@ -55,12 +66,7 @@ export class AppService {
     return this.http.delete(`${environment.apiUrl}/endpoint/delete/${endpointId}`).toPromise().catch(this.handleErrors);
   }
 
-  handleErrors(error: Response): void {
-    // unauthorized
-    if (error.status === 403) {
-      location.href = '/login';
-      return;
-    }
-    throw new Error(error.json()['message']);
+  handleErrors(errorRes: HttpErrorResponse): void {
+    console.log('AppService handleError()', errorRes.message || errorRes.statusText || 'Unknown error, please contact support');
   }
 }
