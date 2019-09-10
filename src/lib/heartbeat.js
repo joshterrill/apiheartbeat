@@ -49,8 +49,8 @@ async function checkHeartbeat(endpoint, isManualCheck) {
     };
     const heartbeat = await request(endpoint.url, options);
     if (!heartbeat || !heartbeat.body || heartbeat.error) {
-      await saveEndpointMessage(false, 'error', heartbeat.error, isManualCheck, heartbeat.elapsedTime, endpoint);
-      return {ok: false, status: 'error', message: heartbeat.error};
+      await saveEndpointMessage(false, 'error', heartbeat.error || heartbeat.statusMessage, isManualCheck, heartbeat.elapsedTime, endpoint);
+      return {ok: false, status: 'error', message: heartbeat.error || heartbeat.statusMessage};
     } else if (heartbeat && heartbeat.statusCode === endpoint.statusCode && endpoint.responseTime > heartbeat.elapsedTime) {
       await saveEndpointMessage(true, 'ok', 'Success', isManualCheck, heartbeat.elapsedTime, endpoint);
       return {ok: true, status: 'ok', message: 'Success'};

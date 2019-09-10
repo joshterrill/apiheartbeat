@@ -3,7 +3,7 @@ const utilities = require('./utilities');
 
 const { emailNotificationTemplate } = require('./templates');
 
-function sendGmail(to, endpoint, message) {
+async function sendGmail(to, endpoint, message) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -22,11 +22,13 @@ function sendGmail(to, endpoint, message) {
       message,
     }),
   };
-  transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, async (error, info) => {
     if (error) {
       console.error('Error sending mail from sendGmail()', error);
       return;
     }
+    endpoint.dateTimeOfLastNotification = new Date();
+    return await endpoint.save();
   });
 }
 

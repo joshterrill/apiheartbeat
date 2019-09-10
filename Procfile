@@ -1,2 +1,2 @@
-release: ./ci.sh
+# release: ./ci.sh
 web: npm start

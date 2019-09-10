@@ -2,6 +2,7 @@ const scheduler = require('node-schedule');
 const heartbeat = require('./heartbeat');
 const notifiers = require('./notifiers');
 const UserModel = require('../models/User');
+const moment = require('moment');
 
 function startScheduler() {
   const j = scheduler.scheduleJob('1 * * * * *', async () => {
@@ -15,10 +16,11 @@ function startScheduler() {
           endpoint.status = check.status;
           endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
           await endpoint.save();
-          if (check.status === 'error') {
+          const shouldSendEmailNotification = endpoint.dateTimeOfLastNotification ? moment(endpoint.dateTimeOfLastNotification).add(endpoint.timeToWaitBetweenNotificationsFrequency || 15, endpoint.timeToWaitBetweenNotificationsInterval || 'minutes') < new Date() : true;
+          if (check.status === 'error' && shouldSendEmailNotification) {
             const user = await UserModel.findById(endpoint.userId);
             if (user) {
-              notifiers.sendGmail(user.email, endpoint, check.message);
+              await notifiers.sendGmail(user.email, endpoint, check.message);
             }
           }
         } catch (error) {
@@ -27,8 +29,9 @@ function startScheduler() {
           endpoint.nextHeartbeatDate = heartbeat.calculateNextHeartbeatDate(new Date(), endpoint.frequency, endpoint.interval);
           await endpoint.save();
           const user = await UserModel.findById(endpoint.userId);
-          if (user) {
-            notifiers.sendGmail(user.email, endpoint, error.message);
+          const shouldSendEmailNotification = endpoint.dateTimeOfLastNotification ? moment(endpoint.dateTimeOfLastNotification).add(endpoint.timeToWaitBetweenNotificationsFrequency || 15, endpoint.timeToWaitBetweenNotificationsInterval || 'minutes') < new Date() : true;
+          if (user && shouldSendEmailNotification) {
+            await notifiers.sendGmail(user.email, endpoint, error.message);
           }
           console.error(`Error retrieving endpoints at ${new Date()}, message: ${error.message}`);
         }
