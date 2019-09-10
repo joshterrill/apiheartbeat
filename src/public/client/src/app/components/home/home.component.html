@@ -92,6 +92,20 @@
             <option value="months">Months</option>
           </select>
         </div>
+        <label>Time To Wait Between Notifications</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Every</span>
+          </div>
+          <input type="number" class="form-control" [(ngModel)]="newEndpoint.timeToWaitBetweenNotificationsFrequency">
+          <select class="form-control" [(ngModel)]="newEndpoint.timeToWaitBetweenNotificationsInterval">
+            <option value="minutes">Minutes</option>
+            <option value="hours">Hours</option>
+            <option value="days">Days</option>
+            <option value="weeks">Weeks</option>
+            <option value="months">Months</option>
+          </select>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

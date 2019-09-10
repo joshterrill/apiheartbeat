@@ -12,6 +12,7 @@ import { AppService } from './app.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './lib/TokenInterceptor';
 import { EndpointComponent } from './components/endpoint/endpoint.component';
+import { NumberOfTimesPipe } from './lib/NumberOfTimes.pipe';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { EndpointComponent } from './components/endpoint/endpoint.component';
     MainComponent,
     HomeComponent,
     EndpointComponent,
+    NumberOfTimesPipe,
   ],
   imports: [
     BrowserModule,

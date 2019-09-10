@@ -25,6 +25,8 @@ export interface NewEndpoint {
   responseTime: number;
   frequency: number;
   interval: string;
+  timeToWaitBetweenNotificationsFrequency: number;
+  timeToWaitBetweenNotificationsInterval: string;
 }
 
 export interface EndpointMessage {

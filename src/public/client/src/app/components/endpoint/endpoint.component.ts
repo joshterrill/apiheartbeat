@@ -74,4 +74,6 @@ export class EndpointComponent implements OnInit, OnDestroy {
     }
   }
 
+  editEndpoint(): void { }
+
 }

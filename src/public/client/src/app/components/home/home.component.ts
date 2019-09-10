@@ -18,6 +18,8 @@ export class HomeComponent {
     responseTime: 500,
     frequency: 1,
     interval: 'hours',
+    timeToWaitBetweenNotificationsFrequency: 15,
+    timeToWaitBetweenNotificationsInterval: 'minutes',
   };
   endpointRefreshInterval: any;
 
@@ -46,6 +48,8 @@ export class HomeComponent {
       responseTime: 500,
       frequency: 1,
       interval: 'hours',
+      timeToWaitBetweenNotificationsFrequency: 15,
+      timeToWaitBetweenNotificationsInterval: 'minutes',
     };
   }
 
