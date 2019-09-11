@@ -18,7 +18,7 @@ async function request(url, options) {
 async function saveEndpointMessage(ok, status, message, isManualCheck, responseTime, endpoint) {
   let lastEndpointMessage = await EndpointMessageModel.find({endpointId: endpoint._id}).sort({dateTime: -1}).limit(1);
   lastEndpointMessage = lastEndpointMessage[0];
-  if (lastEndpointMessage && lastEndpointMessage.message === message && lastEndpointMessage.status === status) {
+  if (lastEndpointMessage && lastEndpointMessage.message === message && lastEndpointMessage.status === status && lastEndpointMessage.isManualCheck === isManualCheck) {
     return await EndpointMessageModel.updateOne(
       {_id: ObjectID(lastEndpointMessage._id)},
       { $set: { dateTime : new Date(), numberOfTimes: lastEndpointMessage.numberOfTimes + 1, responseTime } },
