@@ -4,7 +4,9 @@
       <div class="card my-5">
         <div class="card-body">
           <div class="top mb-3">
-            <h4 class="float-left endpoint-title" [title]="endpoint?.url">{{endpoint?.url}}</h4>
+            <a [href]="endpoint.url" target="_new" [title]="endpoint?.url">
+              <h4 class="float-left endpoint-title">{{endpoint?.url}}</h4>
+            </a>
             <div class="float-right">
               <button class="btn btn-default mr-3" (click)="manualCheck()">Manual Check</button>
               <button class="btn btn-primary mr-3" (click)="editEndpoint()">Edit</button>
