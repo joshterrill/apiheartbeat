@@ -19,7 +19,7 @@ const authRoutes = require('./app/auth/auth.routes');
 const app = express();
 const port = process.env.PORT || 3000;
 
-function init() {
+async function init() {
   app.use(bodyParser({extended: true}));
   app.use(cors());
 
@@ -34,19 +34,21 @@ function init() {
     res.sendFile('index.html', {root: `${__dirname}/public/compiled`});
   });
 
-  mongoose.connect(process.env.MONGO_URL, (err) => {
-    if (err) {
-      console.error('Error connecting to mongoose database', err);
-      return;
-    }
-
+  try {
+    const mongooseOptions = {
+      reconnectTries: Number.MAX_VALUE,
+      reconnectInterval: 1000
+    };
+    await mongoose.connect(process.env.MONGO_URL, mongooseOptions);
     app.listen(port, () => {
       console.log(`Server listening on port ${port} in environment: ${process.env.NODE_ENV}`);
       if (process.env.NODE_ENV !== 'development') {
         scheduler.startScheduler();
       }
     });
-  });
+  } catch (error) {
+    console.error('Unable to connect to mongoose database', error);
+  }
 }
 
 module.exports = init;
