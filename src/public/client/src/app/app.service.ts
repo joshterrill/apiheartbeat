@@ -36,7 +36,6 @@ export class AppService {
   }
 
   async getEndpoints(update = false): Promise<Endpoint[]> {
-    console.log('calling get endpoint')
     if (this.endpoints && !update) {
       return this.endpoints;
     } else {
@@ -69,4 +68,8 @@ export class AppService {
   handleErrors(errorRes: HttpErrorResponse): void {
     console.log('AppService handleError()', errorRes.message || errorRes.statusText || 'Unknown error, please contact support');
   }
+
+  // binding functions
+
+  onEditEndpoint(endpoint: Endpoint): void {}
 }

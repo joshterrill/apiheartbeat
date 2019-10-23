@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { AppService } from '../../app.service';
-import { Endpoint, NewEndpoint } from '../../app.interfaces';
+import { Endpoint } from '../../app.interfaces';
 import { Router } from '@angular/router';
-
-declare const $: any;
 
 @Component({
   selector: 'app-home',
@@ -12,15 +10,6 @@ declare const $: any;
 })
 export class HomeComponent {
 
-  newEndpoint: NewEndpoint = {
-    url: '',
-    statusCode: 200,
-    responseTime: 500,
-    frequency: 1,
-    interval: 'hours',
-    timeToWaitBetweenNotificationsFrequency: 15,
-    timeToWaitBetweenNotificationsInterval: 'minutes',
-  };
   endpointRefreshInterval: any;
 
   constructor(public appService: AppService, private router: Router) {
@@ -28,29 +17,6 @@ export class HomeComponent {
 
   isInPast(nextDate: string): boolean {
     return new Date(nextDate) < new Date();
-  }
-
-  async saveEndpoint(): Promise<void> {
-    try {
-      await this.appService.saveEndpoint(this.newEndpoint);
-      this.resetNewEndpoint();
-      $('#addNewModal').modal('toggle');
-      await this.appService.getEndpoints(true);
-    } catch (error) {
-      console.log('home saveEndpoint error', error);
-    }
-  }
-
-  resetNewEndpoint(): void {
-    this.newEndpoint = {
-      url: '',
-      statusCode: 200,
-      responseTime: 500,
-      frequency: 1,
-      interval: 'hours',
-      timeToWaitBetweenNotificationsFrequency: 15,
-      timeToWaitBetweenNotificationsInterval: 'minutes',
-    };
   }
 
   view(endpoint: Endpoint): void {

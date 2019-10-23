@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/app.service';
 import { EndpointMessage, Endpoint } from 'src/app/app.interfaces';
 
+declare const $: any;
+
 @Component({
   selector: 'app-endpoint',
   templateUrl: './endpoint.component.html',
@@ -68,12 +70,16 @@ export class EndpointComponent implements OnInit, OnDestroy {
   async delete(): Promise<void> {
     try {
       await this.appService.deleteEndpoint(this.endpoint._id);
+      await this.appService.getEndpoints();
       this.router.navigate(['/home']);
     } catch (error) {
       console.log('endpoint delete error', error);
     }
   }
 
-  editEndpoint(): void { }
+  editEndpoint(): void {
+    $('#addEditModal').modal('toggle');
+    this.appService.onEditEndpoint(this.endpoint);
+  }
 
 }

@@ -29,6 +29,14 @@ async function deleteEndpoint(endpointId) {
 }
 
 async function saveEndpoint(endpoint, userId) {
+  if (endpoint._id) {
+    return await EndpointModel.updateOne(
+      {_id: endpoint._id},
+      {
+        ...endpoint,
+      }
+    );
+  }
   return await EndpointModel.create({
     ...endpoint,
     createdOn: new Date(),
