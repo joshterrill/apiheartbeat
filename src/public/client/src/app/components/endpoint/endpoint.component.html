@@ -9,7 +9,7 @@
             </a>
             <div class="float-right">
               <button class="btn btn-light mr-3" (click)="manualCheck()">Manual Check</button>
-              <button class="btn btn-primary mr-3" (click)="editEndpoint(endpoint)">Edit</button>
+              <button class="btn btn-primary mr-3" (click)="editEndpoint()">Edit</button>
               <button class="btn btn-success mr-3" *ngIf="!endpoint?.isActive" (click)="activate()">Activate</button>
               <button class="btn btn-danger mr-3" *ngIf="endpoint?.isActive" (click)="deactivate()">Deactivate</button>
               <button class="btn btn-danger mr-3" *ngIf="!endpoint?.isActive" (click)="delete()">Delete</button>
