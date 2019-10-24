@@ -4,49 +4,30 @@
 
 An application that checks your API's pulse and sends notifications if they flatline.
 
-### docker
+### install and run
+
+The base server is a NodeJS app and can be run from the root of the project by running:
 
 ```
-# build new docker image
-
-docker build -t docker.redshift.ai:5000/joshterrill/apiheartbeat:1.0.0 .
-
-# run docker image detached
-
-docker run -p 3000:3000 -d docker.redshift.ai:5000/joshterrill/apiheartbeat:1.0.0
-
-# run docker image with stdout
-
-docker run -p 3000:3000 -i -t docker.redshift.ai:5000/joshterrill/apiheartbeat:1.0.0
-
-# run docker image attached with shell
-
-docker run -i -t docker.redshift.ai:5000/joshterrill/apiheartbeat:1.0.0 /bin/bash
-
-# publish to docker registry
-
-docker publish docker.redshift.ai:5000/joshterrill/apiheartbeat:1.0.0
-
-# run in production and always keep on
-
-docker pull docker.redshift.ai:5000/joshterrill/apiheartbeat:latest
-docker stop apiheartbeat
-docker rm apiheartbeat
-docker run -d -p 80:80 --env PORT=80 --name apiheartbeat --restart unless-stopped docker.redshift.ai:5000/joshterrill/apiheartbeat:latest
-
-# when running into permission denied error when trying to pull from private registry run this:
-
-sudo usermod -a -G docker $USER
+npm i
+npm run dev
 ```
 
-### drone
+The client is written in angular and can be found in `src/public/client`. If you are doing development work, you will want to run the client and server side by side. To do this, run
 
 ```
-# execute
-
-drone exec
-
-# execute specific pipeline
-
-drone exec --pipeline notify
+cd src/public/client
+npm ci
+npm start
 ```
+
+### building
+
+To build the client, run
+
+```
+cd src/public/client
+npm run build
+```
+
+This will build and compile the client project files into `src/public/compiled` which will then be served from the server.
