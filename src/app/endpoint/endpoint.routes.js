@@ -55,7 +55,8 @@ module.exports = () => {
   api.get('/messages/:endpointId?', async (req, res) => {
     try {
       const { endpointId } = req.params;
-      const messages = await EndpointService.getMessages(req.tokenData._id, endpointId);
+      const { loadAll } = req.query;
+      const messages = await EndpointService.getMessages(req.tokenData._id, endpointId, loadAll);
       res.json(messages);
     } catch (error) {
       res.json(error);

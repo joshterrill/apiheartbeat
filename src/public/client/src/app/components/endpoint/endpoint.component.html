@@ -55,6 +55,12 @@
               </td>
             </tr>
           </table>
+          <div class="load-more">
+            <button class="btn btn-light" *ngIf="!allLoaded" (click)="loadAll()" [disabled]="loadingMore">
+              <i *ngIf="loadingMore" class="fa fa-spinner fa-spin"></i>
+              Load All
+            </button>
+          </div>
         </div>
       </div>
     </div>

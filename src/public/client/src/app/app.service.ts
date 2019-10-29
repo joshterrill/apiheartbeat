@@ -49,8 +49,8 @@ export class AppService {
     return this.http.post(`${environment.apiUrl}/endpoint/save`, endpoint).toPromise()
   }
 
-  getEndpointMessages(endpointId: string): Promise<any> {
-    return this.http.get(`${environment.apiUrl}/endpoint/messages/${endpointId}`).toPromise().catch(this.handleErrors);
+  getEndpointMessages(endpointId: string, loadAll = false): Promise<any> {
+    return this.http.get(`${environment.apiUrl}/endpoint/messages/${endpointId}?loadAll=${loadAll}`).toPromise().catch(this.handleErrors);
   }
 
   manualCheckEndpoint(endpointId: string): Promise<any> {

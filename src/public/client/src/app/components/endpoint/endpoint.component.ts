@@ -15,6 +15,8 @@ export class EndpointComponent implements OnInit, OnDestroy {
   endpoint: Endpoint;
   messages: EndpointMessage[] = [];
   messagesInterval: any;
+  allLoaded: boolean = false;
+  loadingMore: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute, private appService: AppService, private router: Router) { }
 
@@ -29,10 +31,10 @@ export class EndpointComponent implements OnInit, OnDestroy {
     clearInterval(this.messagesInterval);
   }
 
-  async init(forceRefresh = false): Promise<void> {
+  async init(forceRefresh = false, loadAll = false): Promise<void> {
     try {
       const endpointId = this.activatedRoute.snapshot.params['endpointId'];
-      this.messages = await this.appService.getEndpointMessages(endpointId);
+      this.messages = await this.appService.getEndpointMessages(endpointId, loadAll);
       await this.appService.getEndpoints(forceRefresh);
       this.endpoint = this.appService.endpoints.find(endpoint => endpoint._id === endpointId);
     } catch (error) {
@@ -74,6 +76,18 @@ export class EndpointComponent implements OnInit, OnDestroy {
       this.router.navigate(['/home']);
     } catch (error) {
       console.log('endpoint delete error', error);
+    }
+  }
+
+  async loadAll(): Promise<void> {
+    try {
+      this.loadingMore = true;
+      await this.init(true, true);
+      this.loadingMore = false;
+      this.allLoaded = true;
+    } catch (error) {
+      console.log('endpoint loadAll error', error);
+      this.loadingMore = false;
     }
   }
 

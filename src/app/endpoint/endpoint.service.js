@@ -6,11 +6,12 @@ async function checkEndpoint(endpoint) {
   return await heartbeat.checkHeartbeat(endpoint, true);
 }
 
-async function getMessages(userId, endpointId) {
+async function getMessages(userId, endpointId, loadAll) {
+  const limit = loadAll === 'true' ? null : 20
   if (endpointId) {
-    return await EndpointMessageModel.find({userId, endpointId}).sort({dateTime: -1});
+    return await EndpointMessageModel.find({userId, endpointId}).sort({dateTime: -1}).limit(limit);
   }
-  return await EndpointMessageModel.find({userId}).sort({dateTime: -1});
+  return await EndpointMessageModel.find({userId}).sort({dateTime: -1}).limit(limit);
 }
 
 async function getEndpoints(userId) {
