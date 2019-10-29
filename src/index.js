@@ -20,12 +20,20 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 async function init() {
+  /* Redirect http to https */
+  app.get('*', (req, res, next) => {
+    if (req.headers['x-forwarded-proto'] != 'https' && process.env.NODE_ENV === 'production') {
+      res.redirect(`https://${req.hostname+req.url}`);
+    } else {
+      next();
+    }
+  });
+
   app.use(bodyParser({extended: true}));
   app.use(cors());
 
   app.use(compression());
   app.use(express.static(path.join(__dirname, 'public/compiled')));
-
 
   app.use('/api/auth', authRoutes());
   app.use('/api/endpoint', jwtCheck, endpointRoutes());
