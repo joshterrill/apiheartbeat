@@ -15,6 +15,9 @@ export class LoginComponent implements OnInit {
     password: '',
   };
 
+  error: string = '';
+  loading: boolean = false;
+
   constructor(private router: Router, private appService: AppService) { }
 
   ngOnInit(): void {
@@ -23,15 +26,21 @@ export class LoginComponent implements OnInit {
 
   async doLogin(): Promise<void> {
     try {
-      const {ok, token} = await this.appService.login(this.loginForm);
+      this.loading = true;
+      this.error = '';
+      const {ok, token, error} = await this.appService.login(this.loginForm);
+      this.loading = false;
       if (ok && token) {
         localStorage.setItem('token', token);
         this.router.navigate(['/home']);
+      } else if (error) {
+        this.error = error;
       } else {
-        console.log('register doRegister no token');
+        this.error = 'An unexpected error has occurred, please contact support';
       }
     } catch (error) {
-      console.log('login doLogin error', error);
+      this.loading = false;
+      this.error = error && error.message ? error.message : 'An unexpected error has occurred, please contact support';
     }
   }
 

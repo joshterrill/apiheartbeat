@@ -15,14 +15,16 @@
               <label for="inputPassword">Password</label>
             </div>
 
-            <!-- <div class="custom-control custom-checkbox mb-3">
-              <input type="checkbox" class="custom-control-input" id="customCheck1">
-              <label class="custom-control-label" for="customCheck1">Remember password</label>
-            </div> -->
-            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+            <div class="errors mb-3" *ngIf="error">
+              {{error}}
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" [disabled]="loading">
+              <i class="fa fa-spinner fa-spin" *ngIf="loading"></i>
+              Sign in
+            </button>
             <hr class="my-4">
             <button class="btn btn-lg btn-success btn-block text-uppercase" [routerLink]="'/register'">Register</button>
-            <!-- <button class="btn btn-lg btn-github btn-block text-uppercase"><i class="fab fa-github mr-2"></i> Sign in with Github</button> -->
           </form>
         </div>
       </div>
