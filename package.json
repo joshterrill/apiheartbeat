@@ -9,6 +9,9 @@
     "test": "mocha src/**/*.spec.js",
     "build:client": "cd src/public/client && npm run build"
   },
+  "engines": {
+    "node": "10.9.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joshterrill/apiheartbeat.git"
