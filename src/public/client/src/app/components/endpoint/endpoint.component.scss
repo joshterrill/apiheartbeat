@@ -1,5 +1,8 @@
 .endpoint-title {
-  max-width: 70%;
+  max-width: 68%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .top {
