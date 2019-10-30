@@ -19,6 +19,9 @@
               <th>Reponse Time</th>
               <th>Action</th>
             </tr>
+            <tr *ngIf="!appService?.endpoints?.length">
+              <td colspan="7">No heartbeats found</td>
+            </tr>
             <tr *ngFor="let endpoint of appService?.endpoints">
               <td>
                 <ng-container *ngIf="endpoint.isActive">

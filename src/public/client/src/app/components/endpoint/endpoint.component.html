@@ -50,8 +50,7 @@
                 </ng-container>
               </td>
               <td>
-                <span *ngIf="!message.isManual">No</span>
-                <span *ngIf="message.isManual">Yes</span>
+                {{message.isManualCheck ? 'Yes' : 'No'}}
               </td>
             </tr>
           </table>
