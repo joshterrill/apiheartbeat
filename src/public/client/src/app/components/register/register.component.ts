@@ -16,6 +16,9 @@ export class RegisterComponent implements OnInit {
     confirmPassword: '',
   };
 
+  error: string = '';
+  loading: boolean = false;
+
   constructor(private appService: AppService, private router: Router) { }
 
   ngOnInit(): void {
@@ -23,16 +26,30 @@ export class RegisterComponent implements OnInit {
 
   async doRegister(): Promise<void> {
     try {
-      const {ok, token} = await this.appService.register(this.registerForm);
-      if (ok && token) {
-        localStorage.setItem('token', token);
-        this.router.navigate(['/home']);
+      this.error = '';
+      if (this.validateForm()) {
+        this.loading = true;
+        const {ok, token, error} = await this.appService.register(this.registerForm);
+        this.loading = false;
+        if (ok && token) {
+          localStorage.setItem('token', token);
+          this.router.navigate(['/home']);
+        } else {
+          this.error = error;
+        }
       } else {
-        console.log('register doRegister no token');
+        this.error = 'Please fill out all fields and ensure passwords match';
       }
     } catch (error) {
-      console.log('register doRegister error', error);
+      this.loading = false;
+      this.error = error && error.message ? error.message : 'An unexpected error has occurred, please contact support';
     }
+  }
+
+  private validateForm(): boolean {
+    return (this.registerForm.email && this.registerForm.password && this.registerForm.confirmPassword) &&
+      (this.registerForm.password === this.registerForm.confirmPassword) &&
+      (this.registerForm.password !== '' && this.registerForm.confirmPassword !== '');
   }
 
 }

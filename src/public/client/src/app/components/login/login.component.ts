@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
 
   async doLogin(): Promise<void> {
     try {
-      this.loading = true;
       this.error = '';
+      this.loading = true;
       const {ok, token, error} = await this.appService.login(this.loginForm);
       this.loading = false;
       if (ok && token) {
