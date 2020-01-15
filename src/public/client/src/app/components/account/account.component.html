@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <div class="card my-5">
+                <div class="card-body">
+                    <div class="top title-row">
+                        <h1>Account</h1>
+                    </div>
+                    <form (submit)="doChangeEmail()" [formGroup]="changeEmailForm">
+                        <div class="form-group">
+                            <label>Email address</label>
+                            <input type="email" formControlName="email" class="form-control mb-2" placeholder="Enter email">
+                            <button class="btn btn-primary" [disabled]="!changeEmailForm.valid">Change Email</button>
+                        </div>
+                    </form>
+                    <form (submit)="doChangePassword()" [formGroup]="changePasswordForm">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" formControlName="currentPassword" class="form-control mb-2" placeholder="Enter Current Password">
+                            <input type="password" formControlName="newPassword" class="form-control mb-2" placeholder="Enter New Password">
+                            <input type="password" formControlName="confirmNewPassword" class="form-control mb-2" placeholder="Retype New Password">
+                            <button class="btn btn-primary" [disabled]="!changePasswordForm.valid">Change Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-add-edit-endpoint [isAddNew]="true"></app-add-edit-endpoint>

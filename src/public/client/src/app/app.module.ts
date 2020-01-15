@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,7 @@ import { TokenInterceptor } from './lib/TokenInterceptor';
 import { EndpointComponent } from './components/endpoint/endpoint.component';
 import { NumberOfTimesPipe } from './lib/NumberOfTimes.pipe';
 import { AddEditEndpointComponent } from './components/add-edit-endpoint/add-edit-endpoint.component';
+import { AccountComponent } from './components/account/account.component';
 
 @NgModule({
   declarations: [
@@ -25,12 +26,14 @@ import { AddEditEndpointComponent } from './components/add-edit-endpoint/add-edi
     EndpointComponent,
     NumberOfTimesPipe,
     AddEditEndpointComponent,
+    AccountComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     {

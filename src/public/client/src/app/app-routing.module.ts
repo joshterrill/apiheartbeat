@@ -5,6 +5,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { MainComponent } from './components/main/main.component';
 import { HomeComponent } from './components/home/home.component';
 import { EndpointComponent } from './components/endpoint/endpoint.component';
+import { AccountComponent } from './components/account/account.component';
 
 const routes: Routes = [
   {path: '',   redirectTo: '/home', pathMatch: 'full'},
@@ -12,6 +13,7 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: '', component: MainComponent, children: [
     {path: 'home', component: HomeComponent},
+    {path: 'account', component: AccountComponent},
     {path: 'endpoint/:endpointId', component: EndpointComponent},
   ]},
   {path: '**',   redirectTo: '/home', pathMatch: 'full'},

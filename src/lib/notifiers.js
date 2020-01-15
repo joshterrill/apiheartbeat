@@ -12,7 +12,7 @@ async function sendGmail(to, endpoint, message) {
     },
   });
   const mailOptions = {
-    from: 'joshterrill.dev@gmail.com',
+    from: process.env.SYSTEM_GMAIL_EMAIL,
     to,
     subject: `Heartbeat Status Message: ${endpoint.url}`,
     html: emailNotificationTemplate({
