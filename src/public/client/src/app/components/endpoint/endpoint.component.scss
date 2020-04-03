@@ -1,8 +1,12 @@
 .endpoint-title {
-  max-width: 62%;
+  max-width: calc(100% - 376px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.endpoint-actions {
+    max-width: 376px;
 }
 
 .top {
